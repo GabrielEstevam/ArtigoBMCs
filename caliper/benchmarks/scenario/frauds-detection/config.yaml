@@ -1,0 +1,30 @@
+test:
+  name: frauds-detection
+  description: >-
+    This is an example benchmark for Caliper, to test the backend DLT's
+    performance with bmc creation.
+  workers:
+    number: 1
+  performance:
+    shouldbefast: true
+  rounds:
+    - label: store
+      description: >-
+        Test description for the part asset creation through the deployed
+        contract.
+      txNumber: 1
+      rateControl:
+        type: fixed-rate
+        opts:
+          tps: 10
+      workload:
+        module: benchmarks/scenario/frauds-detection/store.js
+    - label: query
+      description: Test description for the query performance of the deployed contract.
+      txNumber: 1
+      rateControl:
+        type: fixed-rate
+        opts:
+          tps: 1
+      workload:
+         module: benchmarks/scenario/frauds-detection/query.js
