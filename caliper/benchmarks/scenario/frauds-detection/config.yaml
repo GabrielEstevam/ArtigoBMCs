@@ -4,27 +4,87 @@ test:
     This is an example benchmark for Caliper, to test the backend DLT's
     performance with bmc creation.
   workers:
-    number: 1
+    number: 4
   performance:
-    shouldbefast: true
+    shouldbefast: false
   rounds:
     - label: store
       description: >-
         Test description for the part asset creation through the deployed
         contract.
-      txNumber: 1
+      txNumber: 1000
       rateControl:
         type: fixed-rate
         opts:
-          tps: 10
+          tps: 400
       workload:
         module: benchmarks/scenario/frauds-detection/store.js
-    - label: query
-      description: Test description for the query performance of the deployed contract.
-      txNumber: 1
+        arguments:
+          txCount: 1000
+          initId: 0
+    - label: storeVehicle
+      description: >-
+        Test description for the part asset creation through the deployed
+        contract.
+      txNumber: 1000
       rateControl:
         type: fixed-rate
         opts:
-          tps: 1
+          tps: 4000
       workload:
-         module: benchmarks/scenario/frauds-detection/query.js
+        module: benchmarks/scenario/frauds-detection/storeVehicle.js
+        arguments:
+          txCount: 1000
+          initId: 0
+    - label: supplies
+      description: >-
+        Test description for the part asset creation through the deployed
+        contract.
+      txNumber: 1000
+      rateControl:
+        type: fixed-rate
+        opts:
+          tps: 400
+      workload:
+        module: benchmarks/scenario/frauds-detection/supplies.js
+        arguments:
+          bmcCount: 1000
+          vehicleCount: 1000
+    - label: query
+      description: Test description for the query performance of the deployed contract.
+      txNumber: 1000
+      rateControl:
+        type: fixed-rate
+        opts:
+          tps: 1000
+      workload:
+        module: benchmarks/scenario/frauds-detection/query.js
+    - label: evaluateBmcsWorkload3
+      description: >-
+        Test description for the part asset creation through the deployed
+        contract.
+      txNumber: 100
+      rateControl:
+        type: fixed-rate
+        opts:
+          tps: 400
+      workload:
+        module: benchmarks/scenario/frauds-detection/evaluateBmcWorkload3.js
+        arguments:
+          bmcCount: 100
+          suppliesPerBmc: 800
+          vehicleCount: 2000
+    - label: evaluateBmcsRating
+      description: >-
+        Test description for the part asset creation through the deployed
+        contract.
+      txNumber: 100
+      rateControl:
+        type: fixed-rate
+        opts:
+          tps: 50
+      workload:
+        module: benchmarks/scenario/frauds-detection/evaluateBmc.js
+        arguments:
+          bmcCount: 100
+          initId: 0

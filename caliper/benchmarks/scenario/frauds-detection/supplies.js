@@ -33,17 +33,29 @@ class Open extends OperationBase {
    * Assemble TXs for opening new accounts.
    */
   async submitTransaction() {
-    if (this.id == 0) {
+    if (
+      this.id == 0
+      // ||
+      // this.id ==
+      //   (this.roundArguments.bmcCount / this.totalWorkers) *
+      //     (this.workerIndex + 1)
+    ) {
       this.id =
-        (this.roundArguments.txCount / this.totalWorkers) * this.workerIndex;
-      this.id += this.roundArguments.initId;
+        (this.roundArguments.bmcCount / this.totalWorkers) * this.workerIndex;
       console.log("worker " + this.workerIndex + " - init id " + this.id);
     }
     this.id++;
+    // const bmc = Math.ceil(Math.random() * this.roundArguments.bmcCount);
+    // const vehicle = Math.ceil(Math.random() * this.roundArguments.vehicleCount);
+
+    const args =
+      '{"fuel": 10, "odometer": 14000, "vehicleId": "' +
+      this.id +
+      '", "bmcId": "' +
+      this.id +
+      '"}';
     await this.sutAdapter.sendRequests(
-      this.createConnectorRequest("addBmc", [
-        '{"id":"' + this.id + '","fuelType": "Gasoline"}',
-      ])
+      this.createConnectorRequest("addSupply", [args])
     );
   }
 }

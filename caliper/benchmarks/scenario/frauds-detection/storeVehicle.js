@@ -41,8 +41,10 @@ class Open extends OperationBase {
     }
     this.id++;
     await this.sutAdapter.sendRequests(
-      this.createConnectorRequest("addBmc", [
-        '{"id":"' + this.id + '","fuelType": "Gasoline"}',
+      this.createConnectorRequest("addVehicle", [
+        '{"id": "' +
+          this.id.toString() +
+          '","perfil": "Automobiles With Gasoline", "consumption": 14.1, "tankCapacity": 50, "odometer": 0}',
       ])
     );
   }

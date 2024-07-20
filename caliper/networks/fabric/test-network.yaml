@@ -9,19 +9,19 @@ channels:
   - channelName: mychannel
     # the chaincodeIDs of all the fabric chaincodes in caliper-benchmarks
     contracts:
-    - id: frauds-detection-cc
+      - id: frauds-detection-cc
 
 organizations:
   - mspid: Org1MSP
     # Identities come from cryptogen created material for test-network
     identities:
       certificates:
-      - name: 'User1'
-        clientPrivateKey:
-          path: '../fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/05a48a35b3a9c05fb803fe23eaa19d20f8eb22eb4105a87b409025fa9f74a651_sk'
-        clientSignedCert:
-          #path: '../fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/signcerts/User1@org1.example.com-cert.pem'
-          path: '../fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/signcerts/cert.pem'
+        - name: "User1"
+          clientPrivateKey:
+            path: "../fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/c53b7d39805d5c2b5803de1ae0258a84d7301112938d64a70e009e561389cc0f_sk"
+          clientSignedCert:
+            #path: '../fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/signcerts/User1@org1.example.com-cert.pem'
+            path: "../fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/signcerts/cert.pem"
     connectionProfile:
-      path: '../fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/connection-org1.yaml'
+      path: "../fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/connection-org1.yaml"
       discover: true

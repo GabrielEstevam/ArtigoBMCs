@@ -75,6 +75,7 @@ func (t *SuppliesChaincode) addBmc(stub shim.ChaincodeStubInterface, args []stri
 	var bmcData struct {
 		Id            string  `json:"id"`
 		FuelType      string  `json:"fuelType"`
+		SuppliesList map[string]Supply  `json:"suppliesList"`
 	}
 	var err error
 
@@ -92,6 +93,14 @@ func (t *SuppliesChaincode) addBmc(stub shim.ChaincodeStubInterface, args []stri
 		FuelType: bmcData.FuelType,
 		TotalSupplied: 0,
 		SuppliesList: make(map[string]Supply),
+	}
+	
+	if bmcData.SuppliesList != nil {
+		bmc.SuppliesList = bmcData.SuppliesList
+	} 
+
+	for _, supply := range bmc.SuppliesList {
+		bmc.TotalSupplied += int(supply.Fuel)
 	}
 
     bmcAsBytes, err := json.Marshal(bmc)
@@ -367,36 +376,38 @@ func (t *SuppliesChaincode) evaluateAllBmcRating(stub shim.ChaincodeStubInterfac
 		if err != nil {
 			return shim.Error(err.Error())
 		}
-	
-		for vehicleKey, supply := range bmc.SuppliesList {
-			vehicleAsBytes, err := stub.GetState(vehicleKey)
-			if err != nil {
-				jsonResp := "{\"Error\":\"Failed to get state for " + vehicleKey + "\"}"
-				return shim.Error(jsonResp)
-			}
-		
-			err = json.Unmarshal(vehicleAsBytes, &vehicle)
-			if err != nil {
-				return shim.Error(err.Error())
-			}
-			bmcRating += vehicle.Rating * supply.Fuel
-		}    
-	
-		bmcRating /= float64(bmc.TotalSupplied)
-	
-		bmc.Rating = bmcRating
-	
-		updatedBmcAsBytes, err := json.Marshal(bmc)
-		if err != nil {
-			return shim.Error(err.Error())
-		}
+		if (bmc.SuppliesList != nil) {
 
-		err = stub.PutState(data.Key, updatedBmcAsBytes)
-		if err != nil {
-			return shim.Error(err.Error())
-		}
-
-		results = append(results, bmc)
+			for vehicleKey, supply := range bmc.SuppliesList {
+				vehicleAsBytes, err := stub.GetState(vehicleKey)
+				if err != nil {
+					jsonResp := "{\"Error\":\"Failed to get state for " + vehicleKey + "\"}"
+					return shim.Error(jsonResp)
+				}
+				
+				err = json.Unmarshal(vehicleAsBytes, &vehicle)
+				if err != nil {
+					return shim.Error(err.Error())
+				}
+				bmcRating += vehicle.Rating * supply.Fuel
+				}    
+				
+				bmcRating /= float64(bmc.TotalSupplied)
+				
+				bmc.Rating = bmcRating
+				
+				updatedBmcAsBytes, err := json.Marshal(bmc)
+				if err != nil {
+					return shim.Error(err.Error())
+				}
+				
+				err = stub.PutState(data.Key, updatedBmcAsBytes)
+				if err != nil {
+					return shim.Error(err.Error())
+				}
+				
+				results = append(results, bmc)
+			}
 	}
 
 	resultsJSON, err := json.Marshal(results)

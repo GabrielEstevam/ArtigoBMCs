@@ -30,20 +30,39 @@ class Open extends OperationBase {
   }
 
   /**
+   * Teste da avaliação das BMCs
+
+    100 BMC
+    2000 Veiculo
+    40 por Veiculo
+
+    iterar por veiculo escolhendo bmc aleatória
+   */
+
+  /**
    * Assemble TXs for opening new accounts.
    */
   async submitTransaction() {
     if (this.id == 0) {
       this.id =
-        (this.roundArguments.txCount / this.totalWorkers) * this.workerIndex;
-      this.id += this.roundArguments.initId;
+        (this.roundArguments.bmcCount / this.totalWorkers) * this.workerIndex;
       console.log("worker " + this.workerIndex + " - init id " + this.id);
     }
     this.id++;
+    let suppliesList = {};
+    for (let i = 0; i < this.roundArguments.suppliesPerBmc; i++) {
+      let vehicle = Math.ceil(Math.random() * this.roundArguments.vehicleCount);
+      suppliesList["V" + vehicle] = { Fuel: 10 };
+    }
+
+    const args =
+      '{"id":"' +
+      this.id +
+      '","fuelType": "Gasoline", "suppliesList": ' +
+      JSON.stringify(suppliesList) +
+      "}";
     await this.sutAdapter.sendRequests(
-      this.createConnectorRequest("addBmc", [
-        '{"id":"' + this.id + '","fuelType": "Gasoline"}',
-      ])
+      this.createConnectorRequest("addBmc", [args])
     );
   }
 }

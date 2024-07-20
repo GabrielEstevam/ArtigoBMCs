@@ -26,24 +26,14 @@ class Open extends OperationBase {
    */
   constructor() {
     super();
-    this.id = 0;
   }
 
   /**
    * Assemble TXs for opening new accounts.
    */
   async submitTransaction() {
-    if (this.id == 0) {
-      this.id =
-        (this.roundArguments.txCount / this.totalWorkers) * this.workerIndex;
-      this.id += this.roundArguments.initId;
-      console.log("worker " + this.workerIndex + " - init id " + this.id);
-    }
-    this.id++;
     await this.sutAdapter.sendRequests(
-      this.createConnectorRequest("addBmc", [
-        '{"id":"' + this.id + '","fuelType": "Gasoline"}',
-      ])
+      this.createConnectorRequest("evaluateAllBmcRating", [])
     );
   }
 }
