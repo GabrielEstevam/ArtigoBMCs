@@ -1,0 +1,22 @@
+{
+  "name": "gas-tracker-application-server",
+  "version": "1.0.0",
+  "description": "Gas tracker application server implemented in JavaScript",
+  "engines": {
+    "node": ">=12",
+    "npm": ">=5"
+  },
+  "engineStrict": true,
+  "author": "Hyperledger",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "express": "^4.19.2",
+    "fabric-ca-client": "^2.2.4",
+    "fabric-network": "^2.2.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21"
+  }
+}
